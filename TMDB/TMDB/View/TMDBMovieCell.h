@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface TMDBMovieCell : UITableViewCell
-@property (nonatomic,weak) IBOutlet UILabel *name;
+@property (nonatomic, weak) IBOutlet UILabel *name;
 @property (nonatomic, weak) IBOutlet UIImageView *poster;
 @property (nonatomic, weak) IBOutlet UILabel *genres;
 @property (nonatomic, weak) IBOutlet UILabel *releaseDate;

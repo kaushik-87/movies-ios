@@ -8,6 +8,8 @@
 
 #import "TMDBMovie.h"
 #import "MTLValueTransformer.h"
+
+
 @implementation TMDBMovie
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey{
@@ -23,7 +25,6 @@
     return [MTLValueTransformer transformerUsingForwardBlock:^id(NSString *dateString, BOOL *success, NSError *__autoreleasing *error) {
         return [self.dateFormatter stringFromDate:[self.dateFormatter dateFromString:dateString]];
     } reverseBlock:^id(NSDate *date, BOOL *success, NSError *__autoreleasing *error) {
-                NSLog(@"LOG REVERSE %@",[self.dateFormatter stringFromDate:date]);
         return [self.dateFormatter stringFromDate:date];
     }];
 }

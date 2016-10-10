@@ -12,6 +12,7 @@
 #import <UIImageView+WebCache.h>
 #import "TMDBMovieDetailsViewController.h"
 #import "TMDBMovieManager.h"
+#import "TMDBConstants.h"
 
 @interface ViewController ()<UITableViewDataSource,UITableViewDelegate>
 @property (nonatomic, strong) NSArray *movies;
@@ -42,11 +43,12 @@
     [self.manager setSortBy:kSortByReleaseDate];
     [self.manager setMaxListCount:50];
     
+    __block ViewController *viewController = self;
     [self.manager fetchUpcomingMovies:^(NSArray *movies, NSError *error) {
         if (movies) {
-            self.movies = movies;
+            viewController.movies = movies;
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self.moviesList reloadData];
+                [viewController.moviesList reloadData];
             });
         }
     }];
@@ -67,12 +69,13 @@
 
 -(void)loadMore
 {
-    
+    __block ViewController *viewController = self;
+
     [self.manager fetchUpcomingMovies:^(NSArray *movies, NSError *error) {
         if (movies) {
-            self.movies = movies;
+            viewController.movies = movies;
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self.moviesList reloadData];
+                [viewController.moviesList reloadData];
             });
         }
     }];
@@ -103,7 +106,7 @@
     TMDBMovie *movie        = [self.movies objectAtIndex:indexPath.row];
     cell.name.text          = movie.title;
     cell.releaseDate.text   = movie.releaseDate;
-    [cell.poster sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://image.tmdb.org/t/p/w92%@", movie.imagePath]] placeholderImage:[UIImage imageNamed:@"default_poster_img.png"]];
+    [cell.poster sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s%@",kMovieCellImageURL, movie.imagePath]] placeholderImage:[UIImage imageNamed:@"default_poster_img.png"]];
     cell.genres.text        = [self.manager genreStringsForIds:movie.genres];
     
     if (indexPath.row ==  self.movies.count-1) {

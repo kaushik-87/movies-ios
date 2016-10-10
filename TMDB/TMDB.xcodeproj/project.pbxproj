@@ -10,6 +10,7 @@
 		0FC3E25EBCC5F8A3A5D7EA72 /* libPods-TMDB.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5D02EFB5D4103656F6228D6 /* libPods-TMDB.a */; };
 		D52D49851DAB7D1C00340A8F /* TMDBMovieCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D52D49841DAB7D1C00340A8F /* TMDBMovieCell.m */; };
 		D52D49881DABF8E400340A8F /* TMDBMovieDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D52D49871DABF8E400340A8F /* TMDBMovieDetailsViewController.m */; };
+		D52D498E1DAC5D6C00340A8F /* TMDBConstants.h in Sources */ = {isa = PBXBuildFile; fileRef = D52D498D1DAC5D6C00340A8F /* TMDBConstants.h */; };
 		D5305CF21DAAA52300B6082B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D5305CF11DAAA52300B6082B /* main.m */; };
 		D5305CF51DAAA52300B6082B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D5305CF41DAAA52300B6082B /* AppDelegate.m */; };
 		D5305CF81DAAA52300B6082B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5305CF71DAAA52300B6082B /* ViewController.m */; };
@@ -27,6 +28,7 @@
 		D52D49841DAB7D1C00340A8F /* TMDBMovieCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMDBMovieCell.m; path = View/TMDBMovieCell.m; sourceTree = "<group>"; };
 		D52D49861DABF8E400340A8F /* TMDBMovieDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMDBMovieDetailsViewController.h; path = View/TMDBMovieDetailsViewController.h; sourceTree = "<group>"; };
 		D52D49871DABF8E400340A8F /* TMDBMovieDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMDBMovieDetailsViewController.m; path = View/TMDBMovieDetailsViewController.m; sourceTree = "<group>"; };
+		D52D498D1DAC5D6C00340A8F /* TMDBConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMDBConstants.h; path = Utility/TMDBConstants.h; sourceTree = "<group>"; };
 		D5305CED1DAAA52300B6082B /* TMDB.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TMDB.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5305CF11DAAA52300B6082B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		D5305CF31DAAA52300B6082B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -79,6 +81,7 @@
 		D52D498C1DAC4C6D00340A8F /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				D52D498D1DAC5D6C00340A8F /* TMDBConstants.h */,
 			);
 			name = Utility;
 			sourceTree = "<group>";
@@ -283,6 +286,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D5305CF81DAAA52300B6082B /* ViewController.m in Sources */,
+				D52D498E1DAC5D6C00340A8F /* TMDBConstants.h in Sources */,
 				D5305D151DAB18D600B6082B /* TMDBAPIManager.m in Sources */,
 				D5305D0C1DAAC38C00B6082B /* TMDBMovie.m in Sources */,
 				D52D49851DAB7D1C00340A8F /* TMDBMovieCell.m in Sources */,

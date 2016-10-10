@@ -8,12 +8,7 @@
 
 #import "TMDBMovieManager.h"
 #import "TMDBAPIManager.h"
-
-
-#define kUpcomingMoviesURL  "https://api.themoviedb.org/3/movie/upcoming"
-#define kGenreListURL       "https://api.themoviedb.org/3/genre/movie/list"
-#define kAPIKey             "1f54bd990f1cdfb230adb312546d765d"
-#define kLanguage           "en-US"
+#import "TMDBConstants.h"
 
 @interface TMDBMovieGenre : MTLModel<MTLJSONSerializing>
 @property (nonatomic, strong) NSNumber    *genreId;
@@ -60,11 +55,12 @@
 
 - (void) configure
 {
+    __block TMDBMovieManager *movieManager = self;
     [self fetchGenreList:^(NSArray *genre, NSError *error) {
         NSArray *genreList = [genre valueForKeyPath:@"genres"];
         for(NSDictionary *genre in genreList)
         {
-            [self.genreMap setObject:[genre valueForKey:@"name"] forKey:[genre valueForKey:@"id"]];
+            [movieManager.genreMap setObject:[genre valueForKey:@"name"] forKey:[genre valueForKey:@"id"]];
         }
     }];
 }
@@ -86,17 +82,18 @@
 - (void) fetchUpcomingMovies:(void(^)(NSArray *movies, NSError *error))completionBlock
 {
     if (self.movies.count < self.maxListCount) {
-        
+        __block TMDBMovieManager *movieManager = self;
+
         TMDBAPIManager *apiManager = [TMDBAPIManager sharedManager];
         NSString *urlString = [NSString stringWithFormat:@"%s?api_key=%s&language=%s&page=%lu",kUpcomingMoviesURL,kAPIKey,kLanguage,self.pageNumber];
         
         [apiManager loadRequestWithPath:urlString completion:^(id data, NSError *error) {
             
             if (data) {
-                [self.movies addObjectsFromArray:[MTLJSONAdapter modelsOfClass:[TMDBMovie class] fromJSONArray:[data valueForKey:@"results"] error:nil]];
+                [movieManager.movies addObjectsFromArray:[MTLJSONAdapter modelsOfClass:[TMDBMovie class] fromJSONArray:[data valueForKey:@"results"] error:nil]];
             }
             
-            NSArray *sortedMovies = [self sortedArray];
+            NSArray *sortedMovies = [movieManager sortedArray];
             
             if (completionBlock) {
                 completionBlock(sortedMovies,error);
@@ -114,8 +111,10 @@
 
 - (NSArray *)sortedArray
 {
+    __block TMDBMovieManager *movieManager = self;
+
     NSArray *sortedArray = [self.movies sortedArrayUsingComparator: ^(TMDBMovie *movie1, TMDBMovie *movie2) {
-        if (self.sortBy == kSortByName) {
+        if (movieManager.sortBy == kSortByName) {
             return [movie1.title compare: movie2.title];
         }
         
