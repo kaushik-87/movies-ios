@@ -7,6 +7,8 @@
 //
 
 #import "AppDelegate.h"
+#import "ViewController.h"
+#import "TMDBMovieManager.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +19,13 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+//    TMDBMovieManager *movieManager = [[TMDBMovieManager alloc]init];
+//    [movieManager configure];
+    UINavigationController *navigationController = (UINavigationController*)self.window.rootViewController;
+    navigationController.navigationBar.tintColor = [UIColor whiteColor];
+//    ViewController *vc = [navigationController.viewControllers objectAtIndex:0];
+//    vc.manager = movieManager;
     return YES;
 }
 
@@ -24,6 +33,8 @@
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
+
+    
 }
 
 

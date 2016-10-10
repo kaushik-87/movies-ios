@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "TMDBMovieManager.h"
 @interface ViewController : UIViewController
-
+@property (nonatomic, strong) TMDBMovieManager *manager;
+@property (nonatomic, weak) IBOutlet UITableView *moviesList;
 
 @end
 
