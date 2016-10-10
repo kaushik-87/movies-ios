@@ -12,14 +12,13 @@
 
 @interface TMDBMovieDetailsViewController : UIViewController
 
-@property (nonatomic, weak) IBOutlet UIImageView *moviePoster;
-@property (nonatomic, weak) IBOutlet UILabel *name;
-@property (nonatomic, weak) IBOutlet UILabel *genre;
-@property (nonatomic, weak) IBOutlet UILabel *releaseDate;
-@property (nonatomic, weak) IBOutlet UITextView *overview;
-@property (nonatomic, weak) IBOutlet UIImageView *backdropImageView;
-@property (nonatomic, strong) TMDBMovieManager *manager;
-@property (nonatomic, strong) TMDBMovie         *movie;
+@property (nonatomic, weak) IBOutlet UIImageView    *moviePoster;
+@property (nonatomic, weak) IBOutlet UILabel        *name;
+@property (nonatomic, weak) IBOutlet UILabel        *genre;
+@property (nonatomic, weak) IBOutlet UILabel        *releaseDate;
+@property (nonatomic, weak) IBOutlet UITextView     *overview;
+@property (nonatomic, weak) IBOutlet UIImageView    *backdropImageView;
+@property (nonatomic, strong) TMDBMovieManager      *manager;
+@property (nonatomic, strong) TMDBMovie             *movie;
 
-//- (void)loadMovieDetails:(TMDBMovie *)movie;
 @end

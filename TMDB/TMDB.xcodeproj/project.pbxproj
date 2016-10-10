@@ -76,6 +76,13 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		D52D498C1DAC4C6D00340A8F /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Utility;
+			sourceTree = "<group>";
+		};
 		D5305CE41DAAA52300B6082B = {
 			isa = PBXGroup;
 			children = (
@@ -99,6 +106,7 @@
 			children = (
 				D5305CF31DAAA52300B6082B /* AppDelegate.h */,
 				D5305CF41DAAA52300B6082B /* AppDelegate.m */,
+				D52D498C1DAC4C6D00340A8F /* Utility */,
 				D5305D1D1DAB5AE200B6082B /* View */,
 				D5305D161DAB18E000B6082B /* Network */,
 				D5305D091DAAC2FB00B6082B /* Models */,

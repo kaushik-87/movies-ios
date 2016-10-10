@@ -7,8 +7,6 @@
 //
 
 #import "AppDelegate.h"
-#import "ViewController.h"
-#import "TMDBMovieManager.h"
 
 @interface AppDelegate ()
 
@@ -19,13 +17,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    
-//    TMDBMovieManager *movieManager = [[TMDBMovieManager alloc]init];
-//    [movieManager configure];
     UINavigationController *navigationController = (UINavigationController*)self.window.rootViewController;
     navigationController.navigationBar.tintColor = [UIColor whiteColor];
-//    ViewController *vc = [navigationController.viewControllers objectAtIndex:0];
-//    vc.manager = movieManager;
+
     return YES;
 }
 

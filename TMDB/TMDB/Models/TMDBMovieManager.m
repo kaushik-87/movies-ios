@@ -10,13 +10,14 @@
 #import "TMDBAPIManager.h"
 
 
-#define kUpcomingMoviesURL "https://api.themoviedb.org/3/movie/upcoming"
-#define kAPIKey "1f54bd990f1cdfb230adb312546d765d"
-#define kLanguage "en-US"
+#define kUpcomingMoviesURL  "https://api.themoviedb.org/3/movie/upcoming"
+#define kGenreListURL       "https://api.themoviedb.org/3/genre/movie/list"
+#define kAPIKey             "1f54bd990f1cdfb230adb312546d765d"
+#define kLanguage           "en-US"
 
 @interface TMDBMovieGenre : MTLModel<MTLJSONSerializing>
 @property (nonatomic, strong) NSNumber    *genreId;
-@property (nonatomic, strong) NSString      *genreName;
+@property (nonatomic, strong) NSString    *genreName;
 @end
 
 @implementation TMDBMovieGenre
@@ -30,12 +31,13 @@
 @end
 
 @interface TMDBMovieManager()
-@property (nonatomic, strong) NSMutableArray    *movies;
-@property (nonatomic, strong) NSMutableArray    *genres;
-@property (nonatomic, strong) NSMutableDictionary *genreMap;
-@property (nonatomic, assign) NSUInteger    pageNumber;
+@property (nonatomic, strong) NSMutableArray        *movies;
+@property (nonatomic, strong) NSMutableArray        *genres;
+@property (nonatomic, strong) NSMutableDictionary   *genreMap;
+@property (nonatomic, assign) NSUInteger            pageNumber;
 
 - (void)fetchGenreList:(void(^)(NSArray *genre, NSError *error))completionBlock;
+
 @end
 
 
@@ -45,12 +47,12 @@
 {
     self = [super init];
     if (self) {
-        _movies = [[NSMutableArray alloc] init];
-        _maxListCount = 50;
-        _sortBy = kSortByReleaseDate;
-        _genres = [[NSMutableArray alloc]init];
-        _genreMap = [[NSMutableDictionary alloc]init];
-        _pageNumber = 1;
+        _movies         = [[NSMutableArray alloc] init];
+        _maxListCount   = 50;
+        _sortBy         = kSortByReleaseDate;
+        _genres         = [[NSMutableArray alloc]init];
+        _genreMap       = [[NSMutableDictionary alloc]init];
+        _pageNumber     = 1;
     }
     return self;
 }
@@ -70,11 +72,11 @@
 
 - (void)fetchGenreList:(void(^)(NSArray *genre, NSError *error))completionBlock
 {
-    NSString *genreList = @"https://api.themoviedb.org/3/genre/movie/list?api_key=1f54bd990f1cdfb230adb312546d765d&language=en-US";
+    NSString *genreList = [NSString stringWithFormat:@"%s?api_key=%s&language=%s",kGenreListURL,kAPIKey,kLanguage];
     TMDBAPIManager *apiManager = [TMDBAPIManager sharedManager];
+    
     [apiManager loadRequestWithPath:genreList completion:^(id data, NSError *error) {
-        NSLog(@"GENRE LIST =%@",data);
-        NSLog(@"Error %@",error);
+        
         if (completionBlock) {
             completionBlock(data,error);
         }
@@ -84,6 +86,7 @@
 - (void) fetchUpcomingMovies:(void(^)(NSArray *movies, NSError *error))completionBlock
 {
     if (self.movies.count < self.maxListCount) {
+        
         TMDBAPIManager *apiManager = [TMDBAPIManager sharedManager];
         NSString *urlString = [NSString stringWithFormat:@"%s?api_key=%s&language=%s&page=%lu",kUpcomingMoviesURL,kAPIKey,kLanguage,self.pageNumber];
         

@@ -9,13 +9,13 @@
 #import "TMDBMovieDetailsViewController.h"
 #import <UIImageView+WebCache.h>
 
+#define kPosterURL "https://image.tmdb.org/t/p/original"
+
 @interface TMDBMovieDetailsViewController()
 @end
 
 
 @implementation TMDBMovieDetailsViewController
-
-
 
 - (instancetype)initWithCoder:(NSCoder *)coder
 {
@@ -51,13 +51,12 @@
 
 - (void)loadMovieDetails:(TMDBMovie *)movie
 {
-    self.name.text = movie.title;
-    self.overview.text = movie.overview;
+    self.name.text          = movie.title;
+    self.overview.text      = movie.overview;
     [self.overview setScrollsToTop:YES];
-    self.releaseDate.text = movie.releaseDate;
-    self.genre.text = [self.manager genreStringsForIds:movie.genres];
-    [self.moviePoster sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://image.tmdb.org/t/p/original%@", movie.imagePath]] placeholderImage:[UIImage imageNamed:@"default_poster_img.png"]];
-//    [self.backdropImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://image.tmdb.org/t/p/original%@", movie.backdropPath]] placeholderImage:[UIImage imageNamed:nil]];
+    self.releaseDate.text   = movie.releaseDate;
+    self.genre.text         = [self.manager genreStringsForIds:movie.genres];
+    [self.moviePoster sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s%@",kPosterURL, movie.imagePath]] placeholderImage:[UIImage imageNamed:@"default_poster_img.png"]];
 
 }
 

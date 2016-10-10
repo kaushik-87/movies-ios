@@ -27,13 +27,12 @@
 {
     AFHTTPSessionManager *sessionManager = [AFHTTPSessionManager manager];
     [sessionManager GET:path parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-       NSLog(@"responseObject %@",responseObject);
+        
         if (completion) {
             completion(responseObject,nil);
         }
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-//        NSLog(@"Failure = %@",error);
         if (completion) {
             completion(nil,error);
         }
