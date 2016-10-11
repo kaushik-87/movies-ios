@@ -8,7 +8,7 @@
 
 /*
  
- This application is designed and developed to list the upcoming movies using TMDB.
+ This application is designed and developed to list the upcoming movies using TMDB API.
  
  Application has two main screens:
  
@@ -20,7 +20,7 @@
  
  Selecting on each row navigates to detailed screen. Detailed screen displays Movie title, bigger poster image, genres, release date and oveview about the movie.
  
- The application is desgined in such a way that it can extensible for more number of movies and also can be sorted using other parameters like name, popularity etc.
+ The application is desgined in such a way that it can be extensible for handling more number of movies and also can be sorted using other parameters like name, popularity etc.
  
  Major components in the project
  
