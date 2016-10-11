@@ -13,11 +13,14 @@
 #import "TMDBMovieDetailsViewController.h"
 #import "TMDBMovieManager.h"
 #import "TMDBConstants.h"
+#import "TMDBAlertController.h"
+#import "TMDBActivityIndicatorView.h"
 
 @interface TMDBMovieListViewController ()<UITableViewDataSource,UITableViewDelegate>
 @property (nonatomic, strong) NSArray *movies;
 @property (nonatomic, strong) TMDBMovieManager *manager;
-@property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (nonatomic, weak) IBOutlet TMDBActivityIndicatorView *activityIndicator;
+@property (nonatomic, weak) IBOutlet UITableView *moviesList;
 @end
 
 @implementation TMDBMovieListViewController
@@ -49,7 +52,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.title = @"Coming Soon";
+    self.title = NSLocalizedString(@"Coming Soon", @"Coming Soon");
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -60,10 +63,10 @@
 
 - (void)fetchUpcomingMovies
 {
-    [self showActivityIndicator];
+    [self.activityIndicator showActivity];
     __block TMDBMovieListViewController *viewController = self;
     [self.manager fetchUpcomingMovies:^(NSArray *movies, NSError *error) {
-        [self hideActivityIndicator];
+        [self.activityIndicator hideActivity];
         if (movies) {
             viewController.movies = movies;
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -78,27 +81,27 @@
     }];
 }
 
-
--(void)loadMore
-{
-    [self showActivityIndicator];
-    __block TMDBMovieListViewController *viewController = self;
-
-    [self.manager fetchUpcomingMovies:^(NSArray *movies, NSError *error) {
-        [self hideActivityIndicator];
-        if (movies) {
-            viewController.movies = movies;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [viewController.moviesList reloadData];
-            });
-        }
-        
-        if (error) {
-            NSError *fetchingFailedError = [NSError errorWithDomain:kFetchMoviesErrorDomain code:error.code userInfo:error.userInfo];
-            [viewController showAlertViewForError:fetchingFailedError];
-        }
-    }];
-}
+//
+//-(void)loadMore
+//{
+//    [self showActivityIndicator];
+//    __block TMDBMovieListViewController *viewController = self;
+//
+//    [self.manager fetchUpcomingMovies:^(NSArray *movies, NSError *error) {
+//        [self hideActivityIndicator];
+//        if (movies) {
+//            viewController.movies = movies;
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                [viewController.moviesList reloadData];
+//            });
+//        }
+//        
+//        if (error) {
+//            NSError *fetchingFailedError = [NSError errorWithDomain:kFetchMoviesErrorDomain code:error.code userInfo:error.userInfo];
+//            [viewController showAlertViewForError:fetchingFailedError];
+//        }
+//    }];
+//}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -129,7 +132,7 @@
     cell.genres.text        = [self.manager genreStringsForIds:movie.genres];
     
     if (indexPath.row ==  self.movies.count-1) {
-        [self loadMore];
+        [self fetchUpcomingMovies];
     }
     
     return cell;
@@ -149,26 +152,20 @@
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
-//- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-//{    
-//    if (!self.movies.count) {
-//        [self fetchUpcomingMovies];
-//    }
-//}
+
 
 #pragma UIALerViewController 
 
 - (void)showAlertViewForError:(NSError *)error
 {
-    UIAlertController *alertController;
+    NSString *title;
+    NSString *detailedMessage = error.localizedDescription;
     if ([error.domain  isEqualToString: kFetchMoviesErrorDomain]) {
-         alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Fetching Failed", @"Fetching Failed") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
-
+        title = NSLocalizedString(@"Fetching Failed", @"Fetching Failed");
     }
     
     if ([error.domain  isEqualToString: kNetworkReachabilityErrorDomain]) {
-        alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Network Error", @"Network Error") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
-        
+        title = NSLocalizedString(@"Network Error", @"Network Error");
     }
     
     
@@ -189,23 +186,8 @@
                                    [vc fetchUpcomingMovies];
                                }];
     
-    [alertController addAction:okAction];
-    [alertController addAction:retryAction];
-    [self presentViewController:alertController animated:YES completion:^{
-        
-    }];
-    
+    NSArray *actions = [NSArray arrayWithObjects:okAction,retryAction, nil];
+    [TMDBAlertController showAlertFrom:self actionButtons:actions title:title andMessage:detailedMessage];
 }
 
-- (void)showActivityIndicator
-{
-    [self.activityIndicator startAnimating];
-    [self.activityIndicator setHidden:NO];
-}
-
-- (void)hideActivityIndicator
-{
-    [self.activityIndicator stopAnimating];
-    [self.activityIndicator setHidden:YES];
-}
 @end

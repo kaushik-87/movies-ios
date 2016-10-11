@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 @interface TMDBMovieListViewController : UIViewController
-@property (nonatomic, weak) IBOutlet UITableView *moviesList;
 
 @end
 
