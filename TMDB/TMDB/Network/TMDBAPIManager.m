@@ -40,31 +40,6 @@
         }
     }];
 
-    
-//    [[AFNetworkReachabilityManager sharedManager] startMonitoring];
-//    if ([[AFNetworkReachabilityManager sharedManager]isReachable]) {
-//        [sessionManager GET:path parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//            
-//            if (completion) {
-//                completion(responseObject,nil);
-//            }
-//            
-//        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-//            if (completion) {
-//                completion(nil,error);
-//            }
-//        }];
-//    }
-//    else
-//    {
-//        NSMutableDictionary *userInfo = [NSMutableDictionary new];
-//        userInfo[NSLocalizedDescriptionKey] = NSLocalizedString(@"No internet connectivity.", @"No internet connectivity.");
-//
-//        NSError *networkError = [NSError errorWithDomain:kNetworkReachabilityErrorDomain code:1001 userInfo:userInfo];
-//        if (completion) {
-//            completion(nil,networkError);
-//        }
-//    }
 
 }
 

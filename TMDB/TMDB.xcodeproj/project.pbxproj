@@ -15,6 +15,7 @@
 		D52D49AC1DAC81A800340A8F /* TMDBMovieManagerTestCases.m in Sources */ = {isa = PBXBuildFile; fileRef = D52D49AB1DAC81A800340A8F /* TMDBMovieManagerTestCases.m */; };
 		D52D49AF1DAD469E00340A8F /* TMDBAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = D52D49AE1DAD469E00340A8F /* TMDBAlertController.m */; };
 		D52D49B21DAD4C0E00340A8F /* TMDBActivityIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = D52D49B11DAD4C0E00340A8F /* TMDBActivityIndicatorView.m */; };
+		D52D49B81DAD662B00340A8F /* TMDBMovieListDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = D52D49B71DAD662B00340A8F /* TMDBMovieListDataSource.m */; };
 		D5305CF21DAAA52300B6082B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D5305CF11DAAA52300B6082B /* main.m */; };
 		D5305CF51DAAA52300B6082B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D5305CF41DAAA52300B6082B /* AppDelegate.m */; };
 		D5305CF81DAAA52300B6082B /* TMDBMovieListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5305CF71DAAA52300B6082B /* TMDBMovieListViewController.m */; };
@@ -52,6 +53,8 @@
 		D52D49AE1DAD469E00340A8F /* TMDBAlertController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMDBAlertController.m; path = Utility/TMDBAlertController.m; sourceTree = "<group>"; };
 		D52D49B01DAD4C0E00340A8F /* TMDBActivityIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMDBActivityIndicatorView.h; path = Utility/TMDBActivityIndicatorView.h; sourceTree = "<group>"; };
 		D52D49B11DAD4C0E00340A8F /* TMDBActivityIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMDBActivityIndicatorView.m; path = Utility/TMDBActivityIndicatorView.m; sourceTree = "<group>"; };
+		D52D49B61DAD662B00340A8F /* TMDBMovieListDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMDBMovieListDataSource.h; path = Models/TMDBMovieListDataSource.h; sourceTree = "<group>"; };
+		D52D49B71DAD662B00340A8F /* TMDBMovieListDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMDBMovieListDataSource.m; path = Models/TMDBMovieListDataSource.m; sourceTree = "<group>"; };
 		D5305CED1DAAA52300B6082B /* TMDB.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TMDB.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5305CF11DAAA52300B6082B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		D5305CF31DAAA52300B6082B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -190,6 +193,8 @@
 				D5305D0B1DAAC38C00B6082B /* TMDBMovie.m */,
 				D5305D101DAAC74500B6082B /* TMDBMovieManager.h */,
 				D5305D111DAAC74500B6082B /* TMDBMovieManager.m */,
+				D52D49B61DAD662B00340A8F /* TMDBMovieListDataSource.h */,
+				D52D49B71DAD662B00340A8F /* TMDBMovieListDataSource.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -428,6 +433,7 @@
 			files = (
 				D5305CF81DAAA52300B6082B /* TMDBMovieListViewController.m in Sources */,
 				D52D498E1DAC5D6C00340A8F /* TMDBConstants.h in Sources */,
+				D52D49B81DAD662B00340A8F /* TMDBMovieListDataSource.m in Sources */,
 				D5305D151DAB18D600B6082B /* TMDBAPIManager.m in Sources */,
 				D52D49AF1DAD469E00340A8F /* TMDBAlertController.m in Sources */,
 				D5305D0C1DAAC38C00B6082B /* TMDBMovie.m in Sources */,

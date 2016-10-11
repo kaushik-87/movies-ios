@@ -22,6 +22,17 @@
  
  The application is desgined in such a way that it can extensible for more number of movies and also can be sorted using other parameters like name, popularity etc.
  
+ Major components in the project
+ 
+    TMDBMovie           - Class which reresents movie object. Used mantle to handle the JSON parsing.
+ 
+    TMDBMovieManager    - Model manager class which manages the fetching/storing of the list of movies.
+ 
+    TMDBDataSource      - Datsource class for the list view controller. Designed to keep the data source separate from the Viewcontroller.
+ 
+    TMDBAPIManager      - Network manager class which is responsible for communicting with the server. Uses AFNetworking library.
+ 
+ 
  */
 
 #import <UIKit/UIKit.h>

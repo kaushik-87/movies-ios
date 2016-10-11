@@ -15,12 +15,13 @@
 #import "TMDBConstants.h"
 #import "TMDBAlertController.h"
 #import "TMDBActivityIndicatorView.h"
+#import "TMDBMovieListDataSource.h"
 
 @interface TMDBMovieListViewController ()<UITableViewDataSource,UITableViewDelegate>
-@property (nonatomic, strong) NSArray *movies;
 @property (nonatomic, strong) TMDBMovieManager *manager;
 @property (nonatomic, weak) IBOutlet TMDBActivityIndicatorView *activityIndicator;
 @property (nonatomic, weak) IBOutlet UITableView *moviesList;
+@property (nonatomic, strong) TMDBMovieListDataSource *dataSource;
 @end
 
 @implementation TMDBMovieListViewController
@@ -29,10 +30,10 @@
 {
     self = [super initWithCoder:coder];
     if (self) {
-        _movies     = [[NSArray alloc]init];
         _manager    = [[TMDBMovieManager alloc]init];
         [_manager configure];
-
+        _dataSource = [[TMDBMovieListDataSource alloc]init];
+        _dataSource.movieManager = _manager;
     }
     return self;
 }
@@ -46,7 +47,7 @@
     [self.manager setSortBy:kSortByReleaseDate];
     [self.manager setMaxListCount:50];
     
-    [self fetchUpcomingMovies];
+    [self fetchData];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -61,14 +62,14 @@
 }
 
 
-- (void)fetchUpcomingMovies
+- (void)fetchData
 {
     [self.activityIndicator showActivity];
     __block TMDBMovieListViewController *viewController = self;
-    [self.manager fetchUpcomingMovies:^(NSArray *movies, NSError *error) {
+    [self.dataSource loadData:^(BOOL completed, NSError *error) {
         [self.activityIndicator hideActivity];
-        if (movies) {
-            viewController.movies = movies;
+        if (completed) {
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 [viewController.moviesList reloadData];
             });
@@ -80,28 +81,6 @@
         }
     }];
 }
-
-//
-//-(void)loadMore
-//{
-//    [self showActivityIndicator];
-//    __block TMDBMovieListViewController *viewController = self;
-//
-//    [self.manager fetchUpcomingMovies:^(NSArray *movies, NSError *error) {
-//        [self hideActivityIndicator];
-//        if (movies) {
-//            viewController.movies = movies;
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                [viewController.moviesList reloadData];
-//            });
-//        }
-//        
-//        if (error) {
-//            NSError *fetchingFailedError = [NSError errorWithDomain:kFetchMoviesErrorDomain code:error.code userInfo:error.userInfo];
-//            [viewController showAlertViewForError:fetchingFailedError];
-//        }
-//    }];
-//}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -117,7 +96,7 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.movies.count;
+    return [self.dataSource totalNumberOfItems];
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -125,14 +104,17 @@
     
     TMDBMovieCell *cell = (TMDBMovieCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
 
-    TMDBMovie *movie        = [self.movies objectAtIndex:indexPath.row];
-    cell.name.text          = movie.title;
-    cell.releaseDate.text   = movie.releaseDate;
-    [cell.poster sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kMovieCellImageURL, movie.imagePath]] placeholderImage:[UIImage imageNamed:@"default_poster_img.png"]];
-    cell.genres.text        = [self.manager genreStringsForIds:movie.genres];
-    
-    if (indexPath.row ==  self.movies.count-1) {
-        [self fetchUpcomingMovies];
+    TMDBMovie *movie        = [self.dataSource objectAtIndex:indexPath.row];
+    if (movie) {
+        cell.name.text          = movie.title;
+        cell.releaseDate.text   = movie.releaseDate;
+        [cell.poster sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kMovieCellImageURL, movie.imagePath]] placeholderImage:[UIImage imageNamed:@"default_poster_img.png"]];
+        cell.genres.text        = [self.manager genreStringsForIds:movie.genres];
+    }
+
+    //Checking for the last indx to fetch more items
+    if (indexPath.row ==  self.dataSource.totalNumberOfItems-1) {
+        [self fetchData];
     }
     
     return cell;
@@ -145,7 +127,7 @@
     
     TMDBMovieDetailsViewController *detailsViewController = [mainStoryboard instantiateViewControllerWithIdentifier: @"movieDetails"];
     detailsViewController.manager   = self.manager;
-    detailsViewController.movie     = [self.movies objectAtIndex:indexPath.row];
+    detailsViewController.movie     = [self.dataSource objectAtIndex:indexPath.row];
     
     [self.navigationController pushViewController:detailsViewController animated:YES];
     
@@ -183,7 +165,7 @@
                                style:UIAlertActionStyleDefault
                                handler:^(UIAlertAction *action)
                                {
-                                   [vc fetchUpcomingMovies];
+                                   [vc fetchData];
                                }];
     
     NSArray *actions = [NSArray arrayWithObjects:okAction,retryAction, nil];

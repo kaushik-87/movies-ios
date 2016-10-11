@@ -10,21 +10,6 @@
 #import "TMDBAPIManager.h"
 #import "TMDBConstants.h"
 
-@interface TMDBMovieGenre : MTLModel<MTLJSONSerializing>
-@property (nonatomic, strong) NSNumber    *genreId;
-@property (nonatomic, strong) NSString    *genreName;
-@end
-
-@implementation TMDBMovieGenre
-
-+ (NSDictionary *)JSONKeyPathsByPropertyKey
-{
-    return @{ @"genreId" : @"id",
-              @"genreName" : @"name"};
-}
-
-@end
-
 @interface TMDBMovieManager()
 @property (nonatomic, strong) NSMutableArray        *movies;
 @property (nonatomic, strong) NSMutableArray        *genres;
