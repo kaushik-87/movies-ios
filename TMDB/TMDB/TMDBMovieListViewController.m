@@ -6,7 +6,7 @@
 //  Copyright © 2016 Home. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "TMDBMovieListViewController.h"
 #import "TMDBMovieCell.h"
 #import "TMDBMovie.h"
 #import <UIImageView+WebCache.h>
@@ -14,13 +14,13 @@
 #import "TMDBMovieManager.h"
 #import "TMDBConstants.h"
 
-@interface ViewController ()<UITableViewDataSource,UITableViewDelegate>
+@interface TMDBMovieListViewController ()<UITableViewDataSource,UITableViewDelegate>
 @property (nonatomic, strong) NSArray *movies;
 @property (nonatomic, strong) TMDBMovieManager *manager;
 @property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator;
 @end
 
-@implementation ViewController
+@implementation TMDBMovieListViewController
 
 - (instancetype)initWithCoder:(NSCoder *)coder
 {
@@ -61,7 +61,7 @@
 - (void)fetchUpcomingMovies
 {
     [self showActivityIndicator];
-    __block ViewController *viewController = self;
+    __block TMDBMovieListViewController *viewController = self;
     [self.manager fetchUpcomingMovies:^(NSArray *movies, NSError *error) {
         [self hideActivityIndicator];
         if (movies) {
@@ -82,7 +82,7 @@
 -(void)loadMore
 {
     [self showActivityIndicator];
-    __block ViewController *viewController = self;
+    __block TMDBMovieListViewController *viewController = self;
 
     [self.manager fetchUpcomingMovies:^(NSArray *movies, NSError *error) {
         [self hideActivityIndicator];
@@ -180,7 +180,7 @@
                                    
                                }];
     
-    __block ViewController *vc = self;
+    __block TMDBMovieListViewController *vc = self;
     UIAlertAction *retryAction = [UIAlertAction
                                actionWithTitle:NSLocalizedString(@"Retry", @"Retry")
                                style:UIAlertActionStyleDefault

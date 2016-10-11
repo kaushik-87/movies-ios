@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-@interface ViewController : UIViewController
+@interface TMDBMovieListViewController : UIViewController
 @property (nonatomic, weak) IBOutlet UITableView *moviesList;
 
 @end
