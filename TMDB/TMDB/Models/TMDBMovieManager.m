@@ -57,18 +57,22 @@
 {
     __block TMDBMovieManager *movieManager = self;
     [self fetchGenreList:^(NSArray *genre, NSError *error) {
-        NSArray *genreList = [genre valueForKeyPath:@"genres"];
-        for(NSDictionary *genre in genreList)
-        {
-            [movieManager.genreMap setObject:[genre valueForKey:@"name"] forKey:[genre valueForKey:@"id"]];
+        
+        if (genre) {
+            NSArray *genreList = [genre valueForKeyPath:@"genres"];
+            for(NSDictionary *genre in genreList)
+            {
+                [movieManager.genreMap setObject:[genre valueForKey:@"name"] forKey:[genre valueForKey:@"id"]];
+            }
         }
+
     }];
 }
 
 
 - (void)fetchGenreList:(void(^)(NSArray *genre, NSError *error))completionBlock
 {
-    NSString *genreList = [NSString stringWithFormat:@"%s?api_key=%s&language=%s",kGenreListURL,kAPIKey,kLanguage];
+    NSString *genreList = [NSString stringWithFormat:@"%@?api_key=%@&language=%@",kGenreListURL,kAPIKey,kLanguage];
     TMDBAPIManager *apiManager = [TMDBAPIManager sharedManager];
     
     [apiManager loadRequestWithPath:genreList completion:^(id data, NSError *error) {
@@ -85,22 +89,32 @@
         __block TMDBMovieManager *movieManager = self;
 
         TMDBAPIManager *apiManager = [TMDBAPIManager sharedManager];
-        NSString *urlString = [NSString stringWithFormat:@"%s?api_key=%s&language=%s&page=%lu",kUpcomingMoviesURL,kAPIKey,kLanguage,self.pageNumber];
+        NSString *urlString = [NSString stringWithFormat:@"%@?api_key=%@&language=%@&page=%lu",kUpcomingMoviesURL,kAPIKey,kLanguage,self.pageNumber];
         
         [apiManager loadRequestWithPath:urlString completion:^(id data, NSError *error) {
             
             if (data) {
                 [movieManager.movies addObjectsFromArray:[MTLJSONAdapter modelsOfClass:[TMDBMovie class] fromJSONArray:[data valueForKey:@"results"] error:nil]];
+                NSArray *sortedMovies = [movieManager sortedArray];
+                movieManager.pageNumber++;
+                
+                if (completionBlock) {
+                    completionBlock(sortedMovies,error);
+                }
             }
             
-            NSArray *sortedMovies = [movieManager sortedArray];
-            
-            if (completionBlock) {
-                completionBlock(sortedMovies,error);
+            if (error) {
+                completionBlock(nil,error);
             }
+
         }];
         
-        self.pageNumber++;
+    }
+    else
+    {
+        if (completionBlock) {
+            completionBlock(nil,nil);
+        }
     }
 }
 

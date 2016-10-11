@@ -62,7 +62,7 @@
     [self.overview setScrollsToTop:YES];
     self.releaseDate.text   = movie.releaseDate;
     self.genre.text         = [self.manager genreStringsForIds:movie.genres];
-    [self.moviePoster sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s%@",kPosterURL, movie.imagePath]] placeholderImage:[UIImage imageNamed:@"default_poster_img.png"]];
+    [self.moviePoster sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kPosterURL, movie.imagePath]] placeholderImage:[UIImage imageNamed:@"default_poster_img.png"]];
 
 }
 

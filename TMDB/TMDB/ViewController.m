@@ -17,7 +17,7 @@
 @interface ViewController ()<UITableViewDataSource,UITableViewDelegate>
 @property (nonatomic, strong) NSArray *movies;
 @property (nonatomic, strong) TMDBMovieManager *manager;
-
+@property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator;
 @end
 
 @implementation ViewController
@@ -43,15 +43,7 @@
     [self.manager setSortBy:kSortByReleaseDate];
     [self.manager setMaxListCount:50];
     
-    __block ViewController *viewController = self;
-    [self.manager fetchUpcomingMovies:^(NSArray *movies, NSError *error) {
-        if (movies) {
-            viewController.movies = movies;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [viewController.moviesList reloadData];
-            });
-        }
-    }];
+    [self fetchUpcomingMovies];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -66,17 +58,44 @@
 }
 
 
-
--(void)loadMore
+- (void)fetchUpcomingMovies
 {
+    [self showActivityIndicator];
     __block ViewController *viewController = self;
-
     [self.manager fetchUpcomingMovies:^(NSArray *movies, NSError *error) {
+        [self hideActivityIndicator];
         if (movies) {
             viewController.movies = movies;
             dispatch_async(dispatch_get_main_queue(), ^{
                 [viewController.moviesList reloadData];
             });
+        }
+        
+        if (error) {
+            NSError *fetchingFailedError = [NSError errorWithDomain:kFetchMoviesErrorDomain code:error.code userInfo:error.userInfo];
+            [viewController showAlertViewForError:fetchingFailedError];
+        }
+    }];
+}
+
+
+-(void)loadMore
+{
+    [self showActivityIndicator];
+    __block ViewController *viewController = self;
+
+    [self.manager fetchUpcomingMovies:^(NSArray *movies, NSError *error) {
+        [self hideActivityIndicator];
+        if (movies) {
+            viewController.movies = movies;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [viewController.moviesList reloadData];
+            });
+        }
+        
+        if (error) {
+            NSError *fetchingFailedError = [NSError errorWithDomain:kFetchMoviesErrorDomain code:error.code userInfo:error.userInfo];
+            [viewController showAlertViewForError:fetchingFailedError];
         }
     }];
 }
@@ -106,7 +125,7 @@
     TMDBMovie *movie        = [self.movies objectAtIndex:indexPath.row];
     cell.name.text          = movie.title;
     cell.releaseDate.text   = movie.releaseDate;
-    [cell.poster sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s%@",kMovieCellImageURL, movie.imagePath]] placeholderImage:[UIImage imageNamed:@"default_poster_img.png"]];
+    [cell.poster sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kMovieCellImageURL, movie.imagePath]] placeholderImage:[UIImage imageNamed:@"default_poster_img.png"]];
     cell.genres.text        = [self.manager genreStringsForIds:movie.genres];
     
     if (indexPath.row ==  self.movies.count-1) {
@@ -130,4 +149,63 @@
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
+//- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+//{    
+//    if (!self.movies.count) {
+//        [self fetchUpcomingMovies];
+//    }
+//}
+
+#pragma UIALerViewController 
+
+- (void)showAlertViewForError:(NSError *)error
+{
+    UIAlertController *alertController;
+    if ([error.domain  isEqualToString: kFetchMoviesErrorDomain]) {
+         alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Fetching Failed", @"Fetching Failed") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+
+    }
+    
+    if ([error.domain  isEqualToString: kNetworkReachabilityErrorDomain]) {
+        alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Network Error", @"Network Error") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+        
+    }
+    
+    
+    UIAlertAction *okAction = [UIAlertAction
+                               actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel")
+                               style:UIAlertActionStyleDefault
+                               handler:^(UIAlertAction *action)
+                               {
+                                   
+                               }];
+    
+    __block ViewController *vc = self;
+    UIAlertAction *retryAction = [UIAlertAction
+                               actionWithTitle:NSLocalizedString(@"Retry", @"Retry")
+                               style:UIAlertActionStyleDefault
+                               handler:^(UIAlertAction *action)
+                               {
+                                   [vc fetchUpcomingMovies];
+                               }];
+    
+    [alertController addAction:okAction];
+    [alertController addAction:retryAction];
+    [self presentViewController:alertController animated:YES completion:^{
+        
+    }];
+    
+}
+
+- (void)showActivityIndicator
+{
+    [self.activityIndicator startAnimating];
+    [self.activityIndicator setHidden:NO];
+}
+
+- (void)hideActivityIndicator
+{
+    [self.activityIndicator stopAnimating];
+    [self.activityIndicator setHidden:YES];
+}
 @end
